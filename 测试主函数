@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include "list_no_head.h"
+
+int main() {
+	struct node *head = NULL;
+	make_list(&head);
+	int data = 0;
+	printf("Please input the data: ");
+	scanf("%d", &data);
+	struct node *new_node = NULL;
+	while (data != -1) {
+		new_node = make_node(data);
+		insert_to_tail(&head, new_node);
+		//insert_to_head(&head, new_node);
+		printf("Please input the data: ");
+		scanf("%d", &data);
+	}
+
+	printf("Input the data to be searched: ");
+	int sdata = 0;
+	scanf("%d", &sdata);
+	struct node *searched_node = search_node(head, sdata);
+	if (searched_node != NULL) {
+		//delete_node(&head, &searched_node);
+		printf("Input the data to be inserted: ");
+		scanf("%d", &sdata);
+		//insert_before_node(head, searched_node, sdata);
+		insert_after_node(searched_node, sdata);
+	}
+
+	print_list_no_head(head);
+
+	free_list_no_head(&head);
+
+	return 0;
+}
