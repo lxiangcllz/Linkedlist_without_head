@@ -1,5 +1,3 @@
-//无空节点的链表的接口函数的定义文件
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -31,19 +29,17 @@ struct node *make_node(int data) {
 }
 
 //释放一个节点
-void free_node(struct node **free_node) { 
+void free_node(struct node *free_node) { 
 	if (!free_node) {
 		fprintf(stderr, "Invalid argument in free_node\n");
 		return;
 	}
-	struct node *temp = *free_node;
-	printf("Data %d is freed\n", temp->data);
-	free(temp);
-	*free_node = NULL;
+	printf("Data %d is freed\n", free_node->data);
+	free(free_node);
 	return;
 }
 //void free_node(struct node *node) {
-//	if (!node) {
+//	if (node) {
 //		free(node);
 //	}
 //}
@@ -93,14 +89,18 @@ void insert_before_node(struct node *head, struct node *p, int data) {
 		fprintf(stderr, "Invalid arguments in insert_to_node\n");
 		return;
 	}
-	struct node *new_node = (struct node *)malloc(sizeof(struct node));
+	/*struct node *new_node = (struct node *)malloc(sizeof(struct node));
 	if (!new_node) {
 		fprintf(stderr, "malloc error in new_node allocation\n");
 		return;
 	}
 	memset(new_node, 0, sizeof(struct node));
 	new_node->data = data;
-	new_node->next = NULL;
+	new_node->next = NULL;*/
+	struct node *new_node = make_node(data);
+	if (!new_node) {
+		fprintf(stderr, "make node failed\n");
+	}
 
 	struct node *temp = head;
 	while (temp->next != p) {
@@ -155,23 +155,23 @@ struct node *search_node(struct node *head, int data) {
 }
 
 //删除一个节点
-void delete_node(struct node **phead, struct node **pnode) {
+void delete_node(struct node **phead, struct node *pnode) {
 	if (!phead && !pnode) {
 		fprintf(stderr, "Invalid argument in delete_node\n");
 		return;
 	}
 	struct node *p = *phead;
-	struct node *temp_node = *pnode;
-	if (p == temp_node) { //if(p->data == temp_node->data),即原链表第一个节点即为要删除的节点
+	//struct node *temp_node = *pnode;
+	if (p == pnode) { //if(p->data == temp_node->data),即原链表第一个节点即为要删除的节点
 		p = p->next;
-		free_node(&temp_node);
+		free_node(pnode);
 		*phead = p;
 		return;
 	}
 	while (p != NULL) {
-		if (p->next == temp_node) { //if(p->next->data == pnode->data)
-			p->next = temp_node->next;
-			free_node(&temp_node);
+		if (p->next == pnode) { //if(p->next->data == pnode->data)
+			p->next = pnode->next;
+			free_node(pnode);
 			break;
 		}
 		p = p->next;
@@ -204,12 +204,16 @@ void free_list_no_head(struct node **phead) {
 	while (head) {
 		p = head;
 		head = head->next;
-		free_node(&p);
+		free_node(p);
 	}
 	*phead = head;
 	printf("The list is freed\n");
 
 	return;
 }
+
+
+
+
 
 
