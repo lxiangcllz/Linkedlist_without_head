@@ -176,7 +176,7 @@ void delete_node(struct node **phead, struct node *pnode) {
 		}
 		p = p->next;
 	}
-	*phead = p;
+	
 	return;
 }
 
